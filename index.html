@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GIWA BD · KOL 名单</title>
+<style>
+:root{--bg:#0d0f13;--panel:#15181f;--line:#232833;--txt:#e9ebf0;--dim:#8b93a3;--blue:#5b8cff;--green:#3ddc97;--amber:#f2b53c;--violet:#b07dff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:13.5px/1.55 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:inherit;text-decoration:none}
+header{padding:16px 20px 10px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(13,15,19,.96);backdrop-filter:blur(8px);z-index:20}
+h1{font-size:17px;margin:0 0 3px;font-weight:600;letter-spacing:.2px}
+.sub{color:var(--dim);font-size:12px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:11px}
+input[type=search],select{background:var(--panel);color:var(--txt);border:1px solid var(--line);border-radius:7px;padding:7px 10px;font-size:12.5px;outline:none}
+input[type=search]{width:240px}
+input[type=search]:focus,select:focus{border-color:var(--blue)}
+.chip{cursor:pointer;user-select:none;border:1px solid var(--line);border-radius:999px;padding:5px 13px;font-size:12.5px;color:#b8bfcc;background:var(--panel);transition:.15s;white-space:nowrap}
+.chip:hover{border-color:#39404f}
+.chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.chip.on.g{background:var(--green);border-color:var(--green);color:#08231a}
+.chip.on.w{background:var(--amber);border-color:var(--amber);color:#2a1c00}
+table{border-collapse:collapse;width:100%;margin-bottom:80px}
+th{position:sticky;top:112px;background:#12151b;text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);font-size:12px;color:var(--dim);cursor:pointer;white-space:nowrap;font-weight:500;z-index:10}
+th:hover{color:var(--txt)}
+td{padding:9px 10px;border-bottom:1px solid #1a1e26;vertical-align:top}
+tr.sel td{background:#141b26}
+tr:hover td{background:#171c24}
+.h{display:flex;align-items:center;gap:7px;white-space:nowrap}
+.h a{color:var(--blue);font-weight:600}
+.h a:hover{text-decoration:underline}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tag{font-size:11px;padding:1.5px 7px;border-radius:5px;background:#1e232d;color:var(--dim);white-space:nowrap}
+.tag.CN{background:#3a2a12;color:#f2b53c}
+.tag.EN{background:#16283f;color:#7fa8ff}
+.tag.nft{background:#2a1a3a;color:#b07dff}
+.g-Deal{color:var(--green);font-weight:700}
+.g-Watch{color:var(--amber);font-weight:600}
+.g-No{color:#5d6472}
+.bio{color:var(--dim);font-size:12.2px;max-width:430px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.act{display:flex;gap:6px;white-space:nowrap}
+.btn{border:1px solid var(--line);background:var(--panel);color:#c3cad6;border-radius:6px;padding:4px 9px;font-size:11.5px;cursor:pointer}
+.btn:hover{border-color:var(--blue);color:#fff}
+.btn.dm:hover{border-color:var(--violet);color:#d8c0ff}
+input[type=checkbox]{width:15px;height:15px;accent-color:var(--blue);cursor:pointer}
+.dock{position:fixed;left:0;right:0;bottom:0;background:rgba(18,21,27,.98);border-top:1px solid var(--line);padding:10px 20px;display:flex;gap:10px;align-items:center;font-size:12.5px;z-index:30;flex-wrap:wrap}
+.dock b{color:var(--blue)}
+.dock .btn{padding:6px 13px;font-size:12.5px}
+.spacer{flex:1}
+.empty{padding:40px;text-align:center;color:var(--dim)}
+.banner{padding:8px 20px;background:#1b1410;border-bottom:1px solid #3a2a12;color:#f2b53c;font-size:12.5px;display:none}
+@media(max-width:820px){.bio{display:none}th.hide-m,td.hide-m{display:none}input[type=search]{width:150px}th{top:132px}}
+</style>
+</head>
+<body>
+<div class="banner" id="banner"></div>
+<header>
+  <h1>GIWA BD · KOL 名单</h1>
+  <div class="sub">来源：已合作 KOL 的 X 官方「相似账号」推荐 → 逐个读最近 6–8 帖真实浏览量。<span id="cnt">加载中…</span></div>
+  <div class="tools">
+    <input type="search" id="q" placeholder="搜 handle / 简介关键词">
+    <select id="pool"><option value="">全部语言</option><option value="CN">中文</option><option value="EN">英文/其他</option></select>
+    <select id="nft"><option value="">NFT 相关性</option><option value="1">有 NFT 帖</option><option value="0">无 NFT 帖</option></select>
+    <select id="band"><option value="">浏览量</option><option value="1">800–8,000 带内</option><option value="2">低于 800</option><option value="3">高于 8,000</option></select>
+    <select id="fresh"><option value="">更新时间</option><option value="3">3 天内</option><option value="7">7 天内</option><option value="14">14 天内</option></select>
+    <span class="chip g" data-g="Deal">Deal</span>
+    <span class="chip w" data-g="Watch">Watch</span>
+    <span class="chip" data-g="No">No</span>
+    <span class="chip" id="sellAll">只看已选</span>
+  </div>
+</header>
+
+<table>
+  <thead><tr>
+    <th style="width:34px"></th>
+    <th data-k="h">handle</th>
+    <th data-k="g">档位</th>
+    <th data-k="pool" class="hide-m">池</th>
+    <th data-k="f" class="num">粉丝</th>
+    <th data-k="m" class="num">浏览中位</th>
+    <th data-k="rng" class="hide-m">区间</th>
+    <th data-k="age" class="num">最近更新</th>
+    <th data-k="nft" class="num">NFT</th>
+    <th class="hide-m">简介</th>
+    <th></th>
+  </tr></thead>
+  <tbody id="tb"><tr><td colspan="11" class="empty">加载中…</td></tr></tbody>
+</table>
+
+<div class="dock">
+  <span>已选 <b id="seln">0</b> 个</span>
+  <button class="btn" id="copy">复制 handle 列表</button>
+  <button class="btn" id="copyAt">复制 @handle</button>
+  <button class="btn" id="exp">导出 CSV</button>
+  <span class="spacer"></span>
+  <button class="btn" id="clear">清空选择</button>
+</div>
+
+<script>
+const LS = "giwa_bd_sel_v1";
+let DATA = [], meta = {}, sel = new Set(JSON.parse(localStorage.getItem(LS) || "[]"));
+let gset = new Set(), onlySel = false, sortK = "g", asc = true;
+
+const fmt = n => n == null ? "-" : (n >= 10000 ? (n/10000).toFixed(1) + "万" : n.toLocaleString());
+const ord = {Deal:0, Watch:1, No:2};
+const saveSel = () => localStorage.setItem(LS, JSON.stringify([...sel]));
+
+function row(x){
+  const prof = "https://x.com/" + x.h;
+  const dm = x.id ? "https://x.com/messages/compose?recipient_id=" + x.id : prof;
+  const on = sel.has(x.h) ? "checked" : "";
+  return `<tr class="${sel.has(x.h)?"sel":""}" data-h="${x.h}">
+    <td><input type="checkbox" data-sel="${x.h}" ${on}></td>
+    <td><div class="h"><a href="${prof}" target="_blank" rel="noopener">@${x.h}</a></div></td>
+    <td class="g-${x.g}">${x.g}</td>
+    <td class="hide-m"><span class="tag ${x.pool}">${x.pool}</span></td>
+    <td class="num">${fmt(x.f)}</td>
+    <td class="num"><b>${fmt(x.m)}</b></td>
+    <td class="hide-m" style="color:#5d6472;font-size:12px">${x.rng || "-"}</td>
+    <td class="num" style="color:${x.age!=null&&x.age<=7?"var(--green)":"var(--dim)"}">${x.age!=null?x.age+"d":"-"}</td>
+    <td class="num"><span class="tag ${x.nft>0?"nft":""}">${x.nft}</span></td>
+    <td class="hide-m"><div class="bio">${(x.bio||"").replace(/</g,"&lt;")}</div></td>
+    <td><div class="act"><a class="btn" href="${prof}" target="_blank" rel="noopener">主页</a><a class="btn dm" href="${dm}" target="_blank" rel="noopener">私信</a></div></td>
+  </tr>`;
+}
+
+function render(){
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const pool = document.getElementById("pool").value;
+  const nft = document.getElementById("nft").value;
+  const band = document.getElementById("band").value;
+  const fresh = +document.getElementById("fresh").value || 0;
+  let r = DATA.filter(x => {
+    if (gset.size && !gset.has(x.g)) return false;
+    if (onlySel && !sel.has(x.h)) return false;
+    if (q && !(x.h.toLowerCase().includes(q) || (x.bio||"").toLowerCase().includes(q))) return false;
+    if (pool && x.pool !== pool) return false;
+    if (nft !== "" && String(x.nft > 0 ? 1 : 0) !== nft) return false;
+    if (band === "1" && !x.band) return false;
+    if (band === "2" && !(x.m && x.m < 800)) return false;
+    if (band === "3" && !(x.m && x.m > 8000)) return false;
+    if (fresh && !(x.age != null && x.age <= fresh)) return false;
+    return true;
+  });
+  r.sort((a,b) => {
+    let x = a[sortK], y = b[sortK];
+    if (sortK === "g") { x = ord[x]; y = ord[y]; }
+    if (x == null) x = -1;
+    if (y == null) y = -1;
+    return (x > y ? 1 : x < y ? -1 : 0) * (asc ? 1 : -1);
+  });
+  document.getElementById("tb").innerHTML = r.length ? r.map(row).join("") : `<tr><td colspan="11" class="empty">没有符合条件的账号</td></tr>`;
+  const du = meta.updated ? new Date(meta.updated).toLocaleString("zh-CN", {hour12:false}) : "—";
+  document.getElementById("cnt").textContent = `　共 ${DATA.length} 个候选，当前显示 ${r.length} 个 · 数据更新于 ${du}`;
+  document.getElementById("seln").textContent = sel.size;
+  document.querySelectorAll("[data-sel]").forEach(cb => cb.onchange = () => {
+    const h = cb.dataset.sel;
+    if (cb.checked) sel.add(h); else sel.delete(h);
+    saveSel();
+    cb.closest("tr").classList.toggle("sel", cb.checked);
+    document.getElementById("seln").textContent = sel.size;
+  });
+}
+
+async function load(first){
+  try{
+    const r = await fetch("data.json?v=" + Date.now(), {cache:"no-store"});
+    const j = await r.json();
+    const rows = Array.isArray(j) ? j : (j.rows || []);
+    const changed = rows.length !== DATA.length || (j.updated && j.updated !== meta.updated);
+    DATA = rows; meta = Array.isArray(j) ? {} : j;
+    if (changed && !first) {
+      const b = document.getElementById("banner");
+      b.style.display = "block";
+      b.textContent = "名单已更新（" + new Date(meta.updated).toLocaleTimeString("zh-CN",{hour12:false}) + "），刷新页面可看到最新数据。";
+    }
+    render();
+  }catch(e){
+    document.getElementById("tb").innerHTML = `<tr><td colspan="11" class="empty">数据加载失败：${e.message}</td></tr>`;
+  }
+}
+
+document.querySelectorAll(".chip[data-g]").forEach(c => c.onclick = () => {
+  const k = c.dataset.g;
+  if (gset.has(k)) { gset.delete(k); c.classList.remove("on"); }
+  else { gset.add(k); c.classList.add("on"); }
+  render();
+});
+document.getElementById("sellAll").onclick = e => { onlySel = !onlySel; e.target.classList.toggle("on", onlySel); render(); };
+document.querySelectorAll("th[data-k]").forEach(t => t.onclick = () => {
+  const k = t.dataset.k;
+  if (sortK === k) asc = !asc; else { sortK = k; asc = (k === "g" || k === "age" || k === "h"); }
+  render();
+});
+["q","pool","nft","band","fresh"].forEach(id => {
+  const el = document.getElementById(id);
+  el.oninput = render; el.onchange = render;
+});
+
+const selList = () => DATA.filter(x => sel.has(x.h)).map(x => x.h);
+document.getElementById("copy").onclick = async () => {
+  const t = selList().join("\n");
+  if (!t) return alert("先勾选账号");
+  await navigator.clipboard.writeText(t);
+  alert("已复制 " + sel.size + " 个 handle");
+};
+document.getElementById("copyAt").onclick = async () => {
+  const t = selList().map(h => "@" + h).join(" ");
+  if (!t) return alert("先勾选账号");
+  await navigator.clipboard.writeText(t);
+  alert("已复制 " + sel.size + " 个 @handle");
+};
+document.getElementById("exp").onclick = () => {
+  const hs = new Set(selList());
+  const rows = DATA.filter(x => hs.has(x.h));
+  if (!rows.length) return alert("先勾选账号");
+  const keys = ["h","g","pool","f","m","rng","age","nft","bio"];
+  const csv = "\ufeff" + keys.join(",") + "\n" + rows.map(x => keys.map(k => `"${String(x[k]??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv"}));
+  a.download = "giwa-bd-" + new Date().toISOString().slice(0,10) + ".csv";
+  a.click();
+};
+document.getElementById("clear").onclick = () => { if (confirm("清空选择？")) { sel.clear(); saveSel(); render(); } };
+
+load(true);
+setInterval(() => load(false), 90000);   // 每 90 秒检查一次数据是否更新
+</script>
+</body>
+</html>
