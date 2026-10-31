@@ -1,0 +1,510 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NFT 项目冷启动增长复盘：Hazels 案例与可复用方法论</title><style>
+:root{--bg:#0d0f13;--panel:#15181f;--line:#232833;--txt:#e9ebf0;--dim:#8b93a3;--blue:#5b8cff;--green:#3ddc97;--amber:#f2b53c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.8 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+header{padding:14px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(13,15,19,.96);backdrop-filter:blur(8px);z-index:10}
+header a{color:var(--blue);font-size:13px;text-decoration:none}
+main{max-width:860px;margin:0 auto;padding:26px 20px 80px}
+h1{font-size:26px;line-height:1.35;margin:0 0 18px;font-weight:650}
+h2{font-size:19px;margin:38px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:15.5px;margin:24px 0 8px;color:#cfd5e0}
+p{margin:10px 0;color:#d7dbe3}
+blockquote{margin:14px 0;padding:10px 14px;border-left:3px solid var(--blue);background:#131720;color:var(--dim);font-size:13.5px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+th{background:#12151b;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);color:var(--dim);font-weight:500;white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid #1a1e26;vertical-align:top}
+tr:hover td{background:#151a22}
+code{background:#1b202a;padding:1.5px 6px;border-radius:4px;font-size:12.5px;color:#9fc4ff}
+pre{background:#12151b;border:1px solid var(--line);border-radius:8px;padding:14px;overflow:auto}
+pre code{background:none;padding:0;color:#c9d4e6}
+ul,ol{padding-left:22px;color:#d7dbe3}
+li{margin:5px 0}
+strong{color:#fff}
+hr{border:none;border-top:1px solid var(--line);margin:30px 0}
+a{color:var(--blue)}
+input[type=checkbox]{margin-right:6px}
+</style></head><body>
+<header><a href="./index.html">← KOL 名单</a>　·　<a href="./copy.html">BD 文案库</a>　·　<a href="./hazels.html">Hazels 复盘</a></header>
+<main><h1>NFT 项目冷启动增长复盘：Hazels 案例与可复用方法论</h1>
+<blockquote>
+<p>文档性质：内部分析，用于沉淀可迁移的增长方法
+研究对象：Hazels（@0xhazels｜hazels.io｜OpenSea: hazels-official）
+数据截止：2026-10-31
+适用场景：供给 500–5,000、预算有限、无头部资源的中小型 NFT / 数字藏品项目</p>
+</blockquote>
+<hr />
+<h2>0. 摘要</h2>
+<p>Hazels 是一个粉丝量仅 2 万的动漫 PFP 项目，在供给 <strong>1,337</strong>、mint 价约 <strong>15 美元</strong>的条件下完成 <strong>100% 售罄</strong>，mint 后地板价维持在发行价的 <strong>3 倍以上</strong>，挂单率仅 <strong>6.4%</strong>。</p>
+<p>它没有依赖头部 KOL，也没有代币激励。可归纳为一套五段式结构：<strong>供给控制（Supply）→ 定价分层（Quote）→ 资格重构（Eligibility）→ 长尾分发（Distribution）→ 持有留存（Retention）</strong>，简称 <strong>S-Q-E-D-R</strong>。</p>
+<p>本报告拆解该结构的事实依据、运作原理、可迁移参数与失效边界，供后续项目复用。</p>
+<hr />
+<h2>1. 关键事实</h2>
+<h3>1.1 结果指标</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+<th>判读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>总供给</td>
+<td>1,337（最初对外口径 5,555，后下调 76%）</td>
+<td>主动收缩，非被迫</td>
+</tr>
+<tr>
+<td>售罄情况</td>
+<td>1,337 / 1,337</td>
+<td>未售出部分承诺销毁</td>
+</tr>
+<tr>
+<td>独立持有地址</td>
+<td>387（28.9%）</td>
+<td>户均 3.4 个，非一人一号</td>
+</tr>
+<tr>
+<td>mint 价格</td>
+<td>GTD 0.006 ETH / WL 0.0065 / 公开 ≈0.0073</td>
+<td>三轮价差仅约 20%</td>
+</tr>
+<tr>
+<td>二级地板</td>
+<td>约 $50.85（≈0.023 ETH）</td>
+<td>约 3.3× mint 价</td>
+</tr>
+<tr>
+<td>挂单率</td>
+<td>6.4%（86 / 1,337）</td>
+<td>极低，抛压被结构性抑制</td>
+</tr>
+<tr>
+<td>累计成交额</td>
+<td>$22.6K</td>
+<td>二级规模小，但价格守住</td>
+</tr>
+<tr>
+<td>X 粉丝 / 发帖量</td>
+<td>20,083 / 779</td>
+<td>存量粉丝规模不构成解释力</td>
+</tr>
+</tbody>
+</table>
+<h3>1.2 分发规模</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tessera（抽奖平台）上该项目抽奖页</td>
+<td>80 个</td>
+</tr>
+<tr>
+<td>可命名的合作社区 / DAO</td>
+<td>45 个</td>
+</tr>
+<tr>
+<td>可见报名人数的场次</td>
+<td>72 场，合计约 3,193 人次，均值 44 人/场</td>
+</tr>
+<tr>
+<td>X 上以统一模板发帖的个人账号</td>
+<td>48 个以上</td>
+</tr>
+</tbody>
+</table>
+<p>结论：单场平均触达仅 44 人，属于长尾规模；总量约 3,200 人次，与 1,337 的成交形成约 <strong>42% 的转化率</strong>。</p>
+<h3>1.3 时间线</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9 月中—10 月中</td>
+<td>45 个社区批量抽奖蓄水，白单按榜单/任务发放</td>
+</tr>
+<tr>
+<td>10/14–15</td>
+<td>四轮 mint（Team 免费 → GTD → WL → 公开）</td>
+</tr>
+<tr>
+<td>10/15</td>
+<td>公告未售出销毁</td>
+</tr>
+<tr>
+<td>10/16–22</td>
+<td>每日释放一个角色设定（04/08、05/08…）</td>
+</tr>
+<tr>
+<td>10/19</td>
+<td>持币人专属 Discord 上线（钱包验证身份）</td>
+</tr>
+<tr>
+<td>10/21–23</td>
+<td>Reveal：1,337 个身份、8 条角色线</td>
+</tr>
+<tr>
+<td>10/26 起</td>
+<td>创作者活动（代币供给做奖励池）+ 质押者专属外部白单</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2. 机制拆解</h2>
+<h3>2.1 供给（S）：先算卖得掉多少，再定发多少</h3>
+<p>对外口径从 5,555 下调至 1,337，并在 mint 后承诺<strong>未售出销毁</strong>、不为团队保留。</p>
+<p>判断依据不是"想做多大"，而是"确定性需求有多大"。行业常见错误是供给按预期热度设定，结果留下 60–80% 未售，形成长期负向叙事。Hazels 的做法是把供给压到接近确定性需求的下沿。</p>
+<p><strong>可迁移规则</strong>：供给 ≤ 白单池规模 × 0.4。白单池 3,000 人对应 1,200 左右供给，与案例数值吻合。</p>
+<h3>2.2 定价（Q）：价差消失，卖点从"便宜"转为"保证"</h3>
+<table>
+<thead>
+<tr>
+<th>轮次</th>
+<th>价格</th>
+<th>每钱包限购</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Team</td>
+<td>免费</td>
+<td>555</td>
+</tr>
+<tr>
+<td>GTD</td>
+<td>0.006 ETH</td>
+<td>1</td>
+</tr>
+<tr>
+<td>WL</td>
+<td>0.0065 ETH</td>
+<td>2</td>
+</tr>
+<tr>
+<td>公开</td>
+<td>≈0.0073 ETH</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+<p>三个设计要点：</p>
+<ol>
+<li><strong>价差仅 20%</strong>。白单的经济价值几乎为零，价值全部来自"确定性"（Guaranteed）。这使得白单可作为非现金资源无限发放，而不损伤价格体系。</li>
+<li><strong>限购与轮次反向</strong>：越早的轮次限购越少（GTD 一人一个），制造"早期=稀缺"，同时防止大户包场。</li>
+<li><strong>公开价略高</strong>，让白单持有人获得"占位收益"，产生主动传播动机。</li>
+</ol>
+<p><strong>可迁移规则</strong>：白单定位为"权利"而非"折扣"。一旦用大幅折价定义白单，既压缩利润，也会引来套利者而非社区。</p>
+<h3>2.3 资格（E）：把白单从"抢"改为"挣"</h3>
+<p>Hazels 建立 Studio（studio.hazels.io）：X 账号登录、绑定钱包、参与活动。白单发放依托 <strong>GTD Race</strong>——按贡献（内容产出、拉新、社区任务）排名发放，并设置 <strong>Social Score ≥ 50</strong> 的准入门槛过滤机器账号。</p>
+<p>该设计的成本结构意义：</p>
+<table>
+<thead>
+<tr>
+<th>传统做法</th>
+<th>本方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>付费 KOL 发帖，成本为现金</td>
+<td>白单为奖励，成本接近零</td>
+</tr>
+<tr>
+<td>内容由外部生产，质量不可控</td>
+<td>内容由参与者自产，直接挂钩资格</td>
+</tr>
+<tr>
+<td>一次性曝光</td>
+<td>排行榜持续变动，形成复访理由</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心机制</strong>：把营销预算转化为"资格供给"，让用户以劳动换取确定性。这是本项目在预算有限条件下仍能形成内容密度的关键。</p>
+<h3>2.4 分发（D）：长尾广度取代头部深度</h3>
+<p>执行方式是<strong>批量与中小社区做联合抽奖，并提供统一模板</strong>。合作方抽奖页中可检索到逐字相同的模板文本（含未替换的 <code>[PARTNER NAME]</code> 占位符），证明其分发为模板化批量外包。</p>
+<p>模板结构固定为四段：</p>
+<pre><code>GIVEAWAY TEMPLATE: HAZELS × [PARTNER NAME]
+1) 合作声明：We've partnered with @0xhazels to give our community [N] WL/GTD
+2) 项目定位：一句话说明是什么（anime PFP on Ethereum + 生态）
+3) 参数：Supply / GTD Price / Whitelist Price
+4) 排期：GTD / WL / Public 的具体时间窗 + mint 平台
+</code></pre>
+<p><strong>经济性对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>触达</th>
+<th>成本</th>
+<th>可控性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 个腰部 KOL</td>
+<td>单帖 5–20k 曝光，转化低</td>
+<td>高</td>
+<td>中</td>
+</tr>
+<tr>
+<td>45 个长尾社区各 44 人</td>
+<td>约 3,200 人次进入任务漏斗</td>
+<td>白单（边际成本≈0）</td>
+<td>高（模板统一、结果可核验）</td>
+</tr>
+</tbody>
+</table>
+<p>长尾方案的优势不在曝光量，而在<strong>进入漏斗的都是完成任务的人</strong>，而非浏览者。</p>
+<p><strong>可迁移规则</strong>：把一次预算拆成 30–50 份，每份配 10–30 个白单 + 一份模板 + 一个报名链接，追求的是合格参与量，不是曝光量。</p>
+<h3>2.5 留存（R）：mint 之后才决定地板</h3>
+<p>mint 结束后四项动作决定了二级表现：</p>
+<ol>
+<li><strong>延迟 Reveal（8–9 天）</strong>：期间每日释放一个角色设定，把单一事件拉成连续剧集。</li>
+<li><strong>持币人私域</strong>：Discord 钱包验证，圈层隔离。</li>
+<li><strong>软质押（Soft Staking）</strong>：签名即质押，NFT 不离钱包、不耗 gas、随时解押，按 24 小时计积分（首枚 +0.05，其后每枚 +0.02）。关键副作用：<strong>挂单即终止质押并清零积分</strong>，直接抑制抛售。</li>
+<li><strong>外部白单注入</strong>：向其他项目争取"25–50 个免费 mint 名额"，仅发给质押者。以他人库存维持自身持有者的持续收益。</li>
+</ol>
+<p><strong>原理</strong>：软质押几乎不增加参与成本，却让"持有"具备时间累积价值，同时把挂单行为与经济惩罚绑定。这是挂单率仅 6.4% 的主要解释。</p>
+<h3>2.6 叙事层：不做代币承诺</h3>
+<p>官方文档明确 "no token promise and no yield"，只承诺 access（访问权/资格）。这降低了被指"发币跑路"的风险，也避免了产品价值被金融化定价。其商业模式落在服务侧：为项目方做创作者活动（服务费）、代币/项目库存的分发池、实体周边与授权。</p>
+<hr />
+<h2>3. 方法论提炼：S-Q-E-D-R 框架</h2>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>目标</th>
+<th>关键动作</th>
+<th>建议参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>S</strong> 供给</td>
+<td>保证售罄</td>
+<td>按确定性需求下沿定供给，承诺销毁未售</td>
+<td>供给 ≤ 白单池 × 0.4</td>
+</tr>
+<tr>
+<td><strong>Q</strong> 定价</td>
+<td>让白单成为可无限发放的非现金资源</td>
+<td>阶梯轮次 + 极小价差 + 反向限购</td>
+<td>价差 ≤ 25%；早轮限购 1–2</td>
+</tr>
+<tr>
+<td><strong>E</strong> 资格</td>
+<td>用资格替代营销预算</td>
+<td>贡献榜单 + 账号分门槛</td>
+<td>榜单周期 2–4 周；门槛过滤空号</td>
+</tr>
+<tr>
+<td><strong>D</strong> 分发</td>
+<td>用广度换合格参与</td>
+<td>30–50 个长尾社区，统一模板</td>
+<td>每场 10–30 白单；单场目标 30–100 人</td>
+</tr>
+<tr>
+<td><strong>R</strong> 留存</td>
+<td>稳住地板</td>
+<td>延迟 Reveal + 软质押 + 外部白单注入</td>
+<td>Reveal 7–10 天后；质押计息按日</td>
+</tr>
+</tbody>
+</table>
+<p><strong>三条杠杆</strong>：</p>
+<ol>
+<li><strong>稀缺杠杆</strong>：供给收缩 + 早轮限购 → 提升单份白单的心理价值。</li>
+<li><strong>身份杠杆</strong>：白单 = 资格而非折扣 → 参与者为"确定性"付出劳动。</li>
+<li><strong>外部杠杆</strong>：他人社区的发声、他人项目的白单 → 用外部库存与外部流量降低自身成本。</li>
+</ol>
+<hr />
+<h2>4. 执行清单（可直接套用）</h2>
+<p><strong>蓄水期（T-30 至 T-7）</strong></p>
+<ul>
+<li>[ ] 确定最终供给，并按"白单池 × 0.4"校验；对外口径一旦公布不再上调</li>
+<li>[ ] 搭建资格系统（可用表格/Notion 起步）：任务类型、权重、榜单周期、发放规则</li>
+<li>[ ] 制定统一抽奖模板（四段式），配套一个可追踪的报名链接</li>
+<li>[ ] 分批接洽 30–50 个长尾社区，每批 5–10 个，记录名额与履约情况</li>
+</ul>
+<p><strong>预热期（T-7 至 T-1）</strong></p>
+<ul>
+<li>[ ] 每日一条世界观/角色内容，固定栏目</li>
+<li>[ ] 公开完整规则页（含 FAQ、防骗声明、官方链接唯一性）</li>
+<li>[ ] 白单名单冻结时间提前公示</li>
+</ul>
+<p><strong>mint 期</strong></p>
+<ul>
+<li>[ ] 四轮排期公开到小时；每轮结束前 1–2 小时提醒</li>
+<li>[ ] 未售出处理方案提前公示</li>
+</ul>
+<p><strong>mint 后（T+1 至 T+14）</strong></p>
+<ul>
+<li>[ ] T+1 公告销毁/结算结果</li>
+<li>[ ] 每日角色释放，T+7~10 做 Reveal</li>
+<li>[ ] 上线质押（无 gas、无锁仓）</li>
+<li>[ ] 接洽 2–3 个外部项目，换取 20–50 个名额做质押者专属</li>
+</ul>
+<hr />
+<h2>5. 度量指标</h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>指标</th>
+<th>健康区间（本案基准）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>蓄水</td>
+<td>白单池规模 / 供给</td>
+<td>≥ 2.2（本案约 2.4）</td>
+</tr>
+<tr>
+<td>蓄水</td>
+<td>单场抽奖报名人数</td>
+<td>30–100</td>
+</tr>
+<tr>
+<td>mint</td>
+<td>售罄率</td>
+<td>≥ 95%</td>
+</tr>
+<tr>
+<td>mint</td>
+<td>参与人次 → 成交转化</td>
+<td>≥ 30%（本案约 42%）</td>
+</tr>
+<tr>
+<td>mint 后</td>
+<td>独立持有地址占比</td>
+<td>20–35%</td>
+</tr>
+<tr>
+<td>mint 后</td>
+<td>挂单率</td>
+<td>&lt; 15%</td>
+</tr>
+<tr>
+<td>mint 后</td>
+<td>地板价 / mint 价</td>
+<td>≥ 1.5</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>6. 失效边界与风险</h2>
+<table>
+<thead>
+<tr>
+<th>风险</th>
+<th>触发条件</th>
+<th>后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>白单池虚高</td>
+<td>参与量靠多号刷出</td>
+<td>转化率崩塌，实际售罄率远低于预期</td>
+</tr>
+<tr>
+<td>长尾社区质量差</td>
+<td>社区以撸毛为主，无购买力</td>
+<td>报名多、成交少</td>
+</tr>
+<tr>
+<td>供给守不住</td>
+<td>因热度上调供给</td>
+<td>稀缺叙事失效，地板长期破发</td>
+</tr>
+<tr>
+<td>无后续供给能力</td>
+<td>mint 后无新权益/白单池</td>
+<td>质押变成空转，地板回落</td>
+</tr>
+<tr>
+<td>软质押被滥用</td>
+<td>积分无对应权益</td>
+<td>参与者失去动机</td>
+</tr>
+<tr>
+<td>平台依赖</td>
+<td>依赖单一抽奖平台/单一渠道</td>
+<td>规则变更即失速</td>
+</tr>
+</tbody>
+</table>
+<p><strong>适用性判断</strong>：该模型成立的前提是——项目具备持续的"权益生产"能力（能不断拿到外部白单、能持续产出内容）。若不具备，售罄可能实现，但地板与留存无法维持。<strong>先解决"持币人能得到什么"，再谈 mint 机制。</strong></p>
+<hr />
+<h2>7. 与常见打法的差异</h2>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>常见做法</th>
+<th>Hazels 做法</th>
+<th>差异本质</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>供给</td>
+<td>按预期热度定</td>
+<td>按确定性需求下沿定</td>
+<td>风险定价主体不同</td>
+</tr>
+<tr>
+<td>白单</td>
+<td>折扣凭证，先到先得</td>
+<td>权利凭证，按贡献发放</td>
+<td>从营销费用变为资格供给</td>
+</tr>
+<tr>
+<td>分发</td>
+<td>少数头部 KOL</td>
+<td>45 个长尾社区 + 模板外包</td>
+<td>追求合格参与而非曝光</td>
+</tr>
+<tr>
+<td>代币</td>
+<td>承诺空投</td>
+<td>明确不发币，只给 access</td>
+<td>风险外移，价值内化</td>
+</tr>
+<tr>
+<td>mint 后</td>
+<td>交付结束</td>
+<td>Reveal + 质押 + 外部白单</td>
+<td>把发售当起点</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>附录 A：合作社区清单（Tessera 项目页可核验）</h2>
+<p>Word4zz、The Core、PioneerX、Azkaban、HARTO、Gods Dao、MotionDAO、ChessyMints、Velvet、InsidersDao、Mnodes、Kryptdao、The Conquerors、Capital Alpha、SAGE、Akiro Labs、Stick Dao、IrregularDao、Wale Hub、LastLapRH、Luminadao、Divergents、DiscART、Coralcore、SUD、The Swop、Poked Studio、Guild of Grime、9thstreet、BigD、BOB、Bull Alpha、NEXARA LABS、NFTALPHASPOT、THE SYNDICATE、SublimeDAO、AnyaStudios、Alpha Roboverse、Across Web3、Black Veil Society、Alpha nft、Crimson Zeal、FORTIZODAO、Empire Alpha、halocreators</p>
+<h2>附录 B：数据来源</h2>
+<ul>
+<li>OpenSea 集合页（供给、价格轮次、持有地址、挂单、地板、成交量）</li>
+<li>hazels.io/docs（规则、质押、权益矩阵、商业结构）</li>
+<li>tesserapp.org/project/0xhazels（80 场抽奖、报名人次、合作方）</li>
+<li>X @0xhazels 时间线（31 条帖文抽样：发布节奏、内容类型、浏览量中位约 8.4k）</li>
+</ul>
+<h2>附录 C：数据局限</h2>
+<ul>
+<li>报名人次仅统计页面可见数值的 72 场，实际总量高于 3,193</li>
+<li>X 侧发帖账号以关键词检索获得，为下限而非全量</li>
+<li>粉丝增长曲线、参与者的成交归因无法获取，转化率为总量估算</li>
+<li>浏览量抽样 14 条，中位数仅代表抽样口径</li>
+</ul></main></body></html>
