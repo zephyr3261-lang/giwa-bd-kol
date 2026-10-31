@@ -64,6 +64,7 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--blue);cursor:poin
     <select id="nft"><option value="">NFT 相关性</option><option value="1">有 NFT 帖</option><option value="0">无 NFT 帖</option></select>
     <select id="band"><option value="">浏览量</option><option value="1">800–8,000 带内</option><option value="2">低于 800</option><option value="3">高于 8,000</option></select>
     <select id="fresh"><option value="">更新时间</option><option value="3">3 天内</option><option value="7">7 天内</option><option value="14">14 天内</option></select>
+    <select id="src"><option value="">全部来源</option><option value="Hazels合作">Hazels 合作过</option><option value="搜索">站内搜索</option><option value="推荐">相似推荐</option></select>
     <span class="chip g" data-g="Deal">Deal</span>
     <span class="chip w" data-g="Watch">Watch</span>
     <span class="chip" data-g="No">No</span>
@@ -82,10 +83,11 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--blue);cursor:poin
     <th data-k="rng" class="hide-m">区间</th>
     <th data-k="age" class="num">最近更新</th>
     <th data-k="nft" class="num">NFT</th>
+    <th data-k="gw" class="num">抽奖</th>
     <th class="hide-m">简介</th>
     <th></th>
   </tr></thead>
-  <tbody id="tb"><tr><td colspan="11" class="empty">加载中…</td></tr></tbody>
+  <tbody id="tb"><tr><td colspan="12" class="empty">加载中…</td></tr></tbody>
 </table>
 
 <div class="dock">
@@ -112,7 +114,7 @@ function row(x){
   const on = sel.has(x.h) ? "checked" : "";
   return `<tr class="${sel.has(x.h)?"sel":""}" data-h="${x.h}">
     <td><input type="checkbox" data-sel="${x.h}" ${on}></td>
-    <td><div class="h"><a href="${prof}" target="_blank" rel="noopener">@${x.h}</a></div></td>
+    <td><div class="h"><a href="${prof}" target="_blank" rel="noopener">@${x.h}</a>${x.src&&x.src!=="推荐"?`<span class="tag" style="font-size:10px;${x.src==="Hazels合作"?"background:#3a2a12;color:#f2b53c":""}">${x.src}</span>`:""}</div></td>
     <td class="g-${x.g}">${x.g}</td>
     <td class="hide-m"><span class="tag ${x.pool}">${x.pool}</span></td>
     <td class="num">${fmt(x.f)}</td>
@@ -120,6 +122,7 @@ function row(x){
     <td class="hide-m" style="color:#5d6472;font-size:12px">${x.rng || "-"}</td>
     <td class="num" style="color:${x.age!=null&&x.age<=7?"var(--green)":"var(--dim)"}">${x.age!=null?x.age+"d":"-"}</td>
     <td class="num"><span class="tag ${x.nft>0?"nft":""}">${x.nft}</span></td>
+    <td class="num"><span class="tag ${x.gw>0?"nft":""}">${x.gw??0}</span></td>
     <td class="hide-m"><div class="bio">${(x.bio||"").replace(/</g,"&lt;")}</div></td>
     <td><div class="act"><a class="btn" href="${prof}" target="_blank" rel="noopener">主页</a><a class="btn dm" href="${dm}" target="_blank" rel="noopener">私信</a></div></td>
   </tr>`;
@@ -131,6 +134,7 @@ function render(){
   const nft = document.getElementById("nft").value;
   const band = document.getElementById("band").value;
   const fresh = +document.getElementById("fresh").value || 0;
+  const src = document.getElementById("src").value;
   let r = DATA.filter(x => {
     if (gset.size && !gset.has(x.g)) return false;
     if (onlySel && !sel.has(x.h)) return false;
@@ -141,6 +145,7 @@ function render(){
     if (band === "2" && !(x.m && x.m < 800)) return false;
     if (band === "3" && !(x.m && x.m > 8000)) return false;
     if (fresh && !(x.age != null && x.age <= fresh)) return false;
+    if (src && (x.src || "推荐") !== src) return false;
     return true;
   });
   r.sort((a,b) => {
@@ -150,7 +155,7 @@ function render(){
     if (y == null) y = -1;
     return (x > y ? 1 : x < y ? -1 : 0) * (asc ? 1 : -1);
   });
-  document.getElementById("tb").innerHTML = r.length ? r.map(row).join("") : `<tr><td colspan="11" class="empty">没有符合条件的账号</td></tr>`;
+  document.getElementById("tb").innerHTML = r.length ? r.map(row).join("") : `<tr><td colspan="12" class="empty">没有符合条件的账号</td></tr>`;
   const du = meta.updated ? new Date(meta.updated).toLocaleString("zh-CN", {hour12:false}) : "—";
   document.getElementById("cnt").textContent = `　共 ${DATA.length} 个候选，当前显示 ${r.length} 个 · 数据更新于 ${du}`;
   document.getElementById("seln").textContent = sel.size;
@@ -177,7 +182,7 @@ async function load(first){
     }
     render();
   }catch(e){
-    document.getElementById("tb").innerHTML = `<tr><td colspan="11" class="empty">数据加载失败：${e.message}</td></tr>`;
+    document.getElementById("tb").innerHTML = `<tr><td colspan="12" class="empty">数据加载失败：${e.message}</td></tr>`;
   }
 }
 
@@ -193,7 +198,7 @@ document.querySelectorAll("th[data-k]").forEach(t => t.onclick = () => {
   if (sortK === k) asc = !asc; else { sortK = k; asc = (k === "g" || k === "age" || k === "h"); }
   render();
 });
-["q","pool","nft","band","fresh"].forEach(id => {
+["q","pool","nft","band","fresh","src"].forEach(id => {
   const el = document.getElementById(id);
   el.oninput = render; el.onchange = render;
 });
