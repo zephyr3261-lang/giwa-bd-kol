@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GIWA UP · BD 文案库</title>
+<style>
+:root{--bg:#0d0f13;--panel:#15181f;--line:#232833;--txt:#e9ebf0;--dim:#8b93a3;--blue:#5b8cff;--green:#3ddc97;--violet:#b07dff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.6 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:var(--blue);text-decoration:none}
+header{padding:16px 20px 12px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(13,15,19,.97);backdrop-filter:blur(8px);z-index:10}
+h1{font-size:17px;margin:0 0 4px;font-weight:600}
+.sub{color:var(--dim);font-size:12px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+input{background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:7px 10px;font-size:13px;outline:none;width:220px}
+.chip{cursor:pointer;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12.5px;color:#b8bfcc;background:var(--panel)}
+.chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+main{padding:16px 20px 60px;max-width:900px}
+.card{border:1px solid var(--line);border-radius:10px;background:#12151b;padding:14px 16px;margin-bottom:14px}
+.hd{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.tag{font-size:11px;padding:2px 8px;border-radius:5px;background:#1e232d;color:#9aa0ad}
+.id{color:#4d5462;font-size:11px}
+.en{font-size:13.5px;line-height:1.75;color:#e3e7ee;margin:0 0 8px;white-space:pre-wrap}
+.zh{font-size:12.8px;line-height:1.7;color:#8b93a3;margin:0 0 10px;white-space:pre-wrap}
+.note{font-size:12px;color:#f2b53c;margin:0 0 10px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+button{border:1px solid var(--line);background:var(--panel);color:#c3cad6;border-radius:6px;padding:5px 12px;font-size:12.5px;cursor:pointer}
+button:hover{border-color:var(--blue);color:#fff}
+button.ok{border-color:var(--green);color:var(--green)}
+.hide{display:none}
+@media(max-width:640px){input{width:130px}main{padding:12px}}
+</style></head><body>
+<header>
+ <h1>GIWA UP · BD 文案库</h1>
+ <div class="sub">共 20 条 · 更新于 2026-10-30 · <a href="./index.html">← 回 KOL 名单</a>　把 <b>{name}</b> 换成对方名字、<b>{hook}</b> 换成他最近做的事</div>
+ <div class="tools">
+   <input id="q" placeholder="搜关键词，如 testnet / whitelist / 跟进">
+   <span class="chip" data-cat="官号通用">官号通用</span><span class="chip" data-cat="NFT 原生号">NFT 原生号</span><span class="chip" data-cat="泛加密号">泛加密号</span><span class="chip" data-cat="项目方互推">项目方互推</span><span class="chip" data-cat="跟进 / 收尾">跟进 / 收尾</span>
+ </div>
+</header>
+<main id="list"></main>
+<script>
+const DATA = [{"id": "g01", "cat": "官号通用", "en": "Hi {name}, @GIWAUP is building the first Korean-culture NFT collection on GIWA — the L2 of Upbit, Korea's largest exchange. Still on testnet, but a lot of upside. Open to a quick chat about a whitelist collab?", "zh": "{name} 你好，@GIWAUP 正在 GIWA 上构建第一套韩国文化 NFT。GIWA 是韩国最大交易所 Upbit 的 L2，还在测试网阶段，但潜力很大。方便聊聊白单合作吗？"}, {"id": "g02", "cat": "官号通用", "en": "Hi {name}, we're @GIWAUP — building the first Korean-culture NFT on GIWA, the L2 from Upbit, Korea's largest exchange. It's early (still testnet) and that's the upside. Want to talk whitelist collab?", "zh": "{name} 你好，我们是 @GIWAUP——正在 GIWA 上构建第一套韩国文化 NFT，GIWA 是韩国最大交易所 Upbit 的 L2。现在很早（还在测试网），而这正是机会所在。想聊聊白单合作吗？"}, {"id": "g03", "cat": "官号通用", "en": "Hi {name}, quick one: @GIWAUP is the first Korean-culture NFT on GIWA, Upbit's L2. GIWA is still on testnet but backed by Korea's largest exchange — plenty of upside. Would you be open to a whitelist collab?", "zh": "{name} 你好，简单说：@GIWAUP 是 GIWA 上的第一套韩国文化 NFT，GIWA 是 Upbit 的 L2。GIWA 还在测试网，但背后是韩国最大交易所，潜力很大。你愿意聊聊白单合作吗？"}, {"id": "g04", "cat": "官号通用", "en": "Hi {name}, we're building the first Korean-culture NFT collection on GIWA. GIWA runs on Upbit's rails — Korea's largest exchange — still testnet, big upside. Shall we talk about a whitelist collab?", "zh": "{name} 你好，我们正在 GIWA 上构建第一套韩国文化 NFT 系列。GIWA 背后是韩国最大交易所 Upbit 的基础设施，目前还在测试网，潜力很大。要不要聊聊白单合作？"}, {"id": "g05", "cat": "官号通用", "en": "Hi {name}, @GIWAUP here — the first Korean-culture NFT on GIWA, the L2 of Korea's largest exchange, Upbit. Testnet stage, long runway. Interested in a whitelist collab with us?", "zh": "{name} 你好，这里是 @GIWAUP——GIWA 上的第一套韩国文化 NFT，GIWA 是韩国最大交易所 Upbit 的 L2。处于测试网阶段，路还很长。有兴趣和我们做白单合作吗？"}, {"id": "g06", "cat": "官号通用", "en": "Hi {name}, Korea's largest exchange is building its own L2 — GIWA. We're @GIWAUP, the first Korean-culture NFT collection on it. Still testnet, so it's early. Open to discussing a whitelist collab?", "zh": "{name} 你好，韩国最大的交易所正在做自己的 L2——GIWA。我们是 @GIWAUP，这条链上的第一套韩国文化 NFT。还在测试网，所以现在很早。方便谈谈白单合作吗？"}, {"id": "g07", "cat": "官号通用", "en": "Hi {name}, want to get in early on GIWA? It's Upbit's L2 — Korea's largest exchange — still testnet, but the upside is real. @GIWAUP is the first Korean-culture NFT there. Interested in a whitelist collab?", "zh": "{name} 你好，想早点上 GIWA 吗？它是 Upbit 的 L2，韩国最大交易所，还在测试网，但潜力是实打实的。@GIWAUP 是这条链上的第一套韩国文化 NFT。有兴趣做白单合作吗？"}, {"id": "g08", "cat": "官号通用", "en": "Hi {name}, @GIWAUP — first Korean-culture NFT on GIWA (Upbit's L2, Korea's largest exchange). Testnet now, mainnet upside later. Want to chat whitelist collab?", "zh": "{name} 你好，@GIWAUP——GIWA 上的第一套韩国文化 NFT（GIWA 是韩国最大交易所 Upbit 的 L2）。现在测试网，后面主网有得涨。想聊聊白单合作吗？"}, {"id": "g09", "cat": "官号通用", "en": "Hi {name}, curious if you'd be open to a whitelist collab. Context: @GIWAUP is the first Korean-culture NFT on GIWA, the L2 built by Korea's largest exchange, Upbit — still testnet, lots of upside.", "zh": "{name} 你好，想问下你是否愿意做白单合作。背景：@GIWAUP 是 GIWA 上的第一套韩国文化 NFT，GIWA 是韩国最大交易所 Upbit 做的 L2，还在测试网，潜力很大。"}, {"id": "g10", "cat": "官号通用", "en": "Hi {name}, @GIWAUP is building the first Korean-culture NFT collection on GIWA — an L2 from Upbit, Korea's largest exchange, currently in testnet. We'd like to talk whitelist collaboration if you're open to it.", "zh": "{name} 你好，@GIWAUP 正在 GIWA 上构建第一套韩国文化 NFT 系列——GIWA 是韩国最大交易所 Upbit 的 L2，目前处于测试网阶段。如果你愿意，我们想聊聊白单合作。", "note": "最正式的一条"}, {"id": "n01", "cat": "NFT 原生号", "en": "Hi {name}, we're @GIWAUP — the first Korean-culture NFT on GIWA (Upbit's L2). Saw you minting {hook}, so this might be your kind of thing. Want a whitelist spot?", "zh": "{name} 你好，我们是 @GIWAUP——GIWA（Upbit 的 L2）上的第一套韩国文化 NFT。看到你在 mint {hook}，这个可能正对你的路子。要一个白单位吗？", "note": "把 {hook} 换成他最近 mint 的东西"}, {"id": "n02", "cat": "NFT 原生号", "en": "Hi {name}, hope you don't mind the DM. First Korean-culture NFT on GIWA here, and we'd like to have a collector like you in early. Whitelist spot, if you're interested.", "zh": "{name} 你好，希望不介意我私信。我们是 GIWA 上的第一套韩国文化 NFT，很想让像你这样的收藏者早点进来。有兴趣的话有白单位。", "note": "对 collector，不用问合作，直接给位子"}, {"id": "n03", "cat": "NFT 原生号", "en": "Hi {name}, @GIWAUP is the first Korean-culture NFT on GIWA (Upbit's L2). We're picking a few founding partners from the NFT side — WL spots plus a share of mint revenue. Interested?", "zh": "{name} 你好，@GIWAUP 是 GIWA（Upbit 的 L2）上的第一套韩国文化 NFT。我们在 NFT 侧挑几位创始合伙人——白单位 + mint 收入分成。有兴趣吗？", "note": "分成比例要先定下来，别空口写"}, {"id": "c01", "cat": "泛加密号", "en": "Hi {name}, one thing outside your usual beat: @GIWAUP is the first Korean-culture NFT on GIWA, the L2 built by Upbit — Korea's largest exchange. Still testnet. Would you be open to covering it or a small collab?", "zh": "{name} 你好，说个不在你平常话题里的东西：@GIWAUP 是 GIWA 上的第一套韩国文化 NFT，GIWA 是韩国最大交易所 Upbit 做的 L2，还在测试网。你愿意报道一下或者做个小合作吗？", "note": "对方不发 NFT 时用，先承认\"这不属于你日常内容\""}, {"id": "c02", "cat": "泛加密号", "en": "Hi {name}, @GIWAUP here — first Korean-culture NFT on GIWA (Upbit's L2, still testnet). We're looking for a few people to talk about it before mint. Open to a whitelist collab?", "zh": "{name} 你好，这里是 @GIWAUP——GIWA（Upbit 的 L2，还在测试网）上的第一套韩国文化 NFT。mint 前想找几个人聊聊，愿意做白单合作吗？"}, {"id": "p01", "cat": "项目方互推", "en": "Hi {name}, we're @GIWAUP — the first Korean-culture NFT on GIWA, same chain as you. Both of us are early here, so a cross-promo makes sense: we send WL to your community, you do the same. Want details?", "zh": "{name} 你好，我们是 @GIWAUP——GIWA 上的第一套韩国文化 NFT，和你同一条链。大家都在早期，互推是有意义的：我们给你的社区发白单，你也一样。要细节吗？", "note": "对 GIWA 生态项目方 / launchpad"}, {"id": "p02", "cat": "项目方互推", "en": "Hi {name}, @GIWAUP — first Korean-culture NFT on GIWA. Since we're both building on Upbit's L2 this early, would you be open to a joint giveaway or WL swap?", "zh": "{name} 你好，@GIWAUP——GIWA 上的第一套韩国文化 NFT。既然大家都在这么早的阶段做 Upbit 的 L2，要不要一起做个抽奖或者白单互换？"}, {"id": "f01", "cat": "跟进 / 收尾", "en": "Hi {name}, just following up once in case this got buried. Still happy to hold a whitelist spot for you — no worries at all if it's not your thing.", "zh": "{name} 你好，怕上一条被刷下去了，只跟进一次。白单位还是想给你留着，不是你的方向也完全没关系。", "note": "3–4 天没回，只发一次"}, {"id": "f02", "cat": "跟进 / 收尾", "en": "Totally understand — thanks for reading. I'll keep you in mind for the next one.", "zh": "完全理解，谢谢你读完。下次有合适的再找你。", "note": "婉拒 / 已读不回的收尾，留关系"}, {"id": "f03", "cat": "跟进 / 收尾", "en": "Thanks for getting back to me. Here's the short version: first Korean-culture NFT on GIWA (Upbit's L2), WL for partners, mint share for a few. Want the full deck?", "zh": "谢谢你回复。简单说：GIWA（Upbit 的 L2）上的第一套韩国文化 NFT，合作方给白单，少数几个还有 mint 分成。要完整资料吗？", "note": "对方回了\"说说看\"时用"}];
+let cat = "", q = "";
+function copy(text, btn){
+  navigator.clipboard.writeText(text).then(()=>{
+    const old = btn.textContent;
+    btn.textContent = "已复制 ✓"; btn.classList.add("ok");
+    setTimeout(()=>{btn.textContent = old; btn.classList.remove("ok");}, 1200);
+  });
+}
+function render(){
+  const rows = DATA.filter(x => (!cat || x.cat === cat) &&
+    (!q || (x.en + x.zh + (x.note||"")).toLowerCase().includes(q.toLowerCase())));
+  document.getElementById("list").innerHTML = rows.map(x => `
+    <div class="card">
+      <div class="hd"><span class="tag">${x.cat}</span><span class="id">${x.id}</span></div>
+      <p class="en">${x.en.replace(/</g,"&lt;")}</p>
+      <p class="zh">${x.zh.replace(/</g,"&lt;")}</p>
+      ${x.note ? `<p class="note">※ ${x.note}</p>` : ""}
+      <div class="btns">
+        <button data-en="${x.id}">复制英文</button>
+        <button data-zh="${x.id}">复制中文</button>
+      </div>
+    </div>`).join("") || `<p style="color:#8b93a3">没有匹配的文案</p>`;
+  document.querySelectorAll("button[data-en]").forEach(b => b.onclick = () => {
+    const x = DATA.find(d => d.id === b.dataset.en); copy(x.en, b);
+  });
+  document.querySelectorAll("button[data-zh]").forEach(b => b.onclick = () => {
+    const x = DATA.find(d => d.id === b.dataset.zh); copy(x.zh, b);
+  });
+  document.getElementById("cnt") && (document.getElementById("cnt").textContent = rows.length);
+}
+document.querySelectorAll(".chip[data-cat]").forEach(c => c.onclick = () => {
+  const k = c.dataset.cat;
+  if (cat === k) { cat = ""; c.classList.remove("on"); }
+  else { cat = k; document.querySelectorAll(".chip[data-cat]").forEach(o=>o.classList.remove("on")); c.classList.add("on"); }
+  render();
+});
+document.getElementById("q").oninput = e => { q = e.target.value; render(); };
+render();
+</script></body></html>
